@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Julia ❤️</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/login.css">
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="login-container">
+        <h1 class="login-title">Para Julia 💕</h1>
+        <p class="login-subtitle">Feliz Dia Dos Namorados!</p>
+        
+        <form class="login-form" onsubmit="return login(event)">
+            <h2 style="color: #c44569; margin-bottom: 20px;">FAÇA LOGIN</h2>
+            <input 
+                type="password" 
+                id="password" 
+                class="password-input" 
+                placeholder="Digite a senha..."
+                pattern="[0-9]*"
+                inputmode="numeric"
+                maxlength="8"
+            >
+            <button type="submit" class="login-btn">Entrar ❤️</button>
+            <p class="hint">dica da senha: uma data especial</p>
+            <div id="error-message" class="error" style="display: none;"></div>
+        </form>
+    </div>
+
+    <script>
+        // Criar corações flutuantes
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 6 + 's';
+            heart.style.animationDuration = (Math.random() * 3 + 6) + 's';
+            document.getElementById('hearts').appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 9000);
+        }
+
+        // Criar corações continuamente
+        setInterval(createHeart, 800);
+
+        // Função de login
+        function login(event) {
+            event.preventDefault();
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error-message');
+            
+            if (password === '05032022') {
+                // Animação de sucesso
+                document.querySelector('.login-container').style.animation = 'slideIn 0.5s ease-out reverse';
+                setTimeout(() => {
+                    window.location.href = 'menu.html';
+                }, 500);
+                return false;
+            } else {
+                errorDiv.textContent = 'Senha incorreta! Tente novamente 💔';
+                errorDiv.style.display = 'block';
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+                
+                setTimeout(() => {
+                    errorDiv.style.display = 'none';
+                }, 3000);
+            }
+            return false;
+        }
+
+        // Permitir apenas números
+        document.getElementById('password').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    </script>
+</body>
+</html>

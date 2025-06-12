@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Memória - Julia ❤️</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/jogo.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🎮 Jogo da Memória 🎮</h1>
+            <p class="subtitle">Encontre os pares das nossas fotos!</p>
+        </div>
+        
+        <div class="game-container">
+            <div class="game-info">
+                <div class="info-item">
+                    Movimentos: <span id="moves">0</span>
+                </div>
+                <div class="info-item">
+                    Pares: <span id="pairs">0</span>/6
+                </div>
+                <div class="info-item">
+                    Tempo: <span id="timer">00:00</span>
+                </div>
+            </div>
+            
+            <div class="game-board" id="game-board">
+                <!-- Cards serão gerados pelo JavaScript -->
+            </div>
+            
+            <div class="controls">
+                <button class="btn" onclick="resetGame()">🔄 Novo Jogo</button>
+                <a href="menu.html" class="btn">← Voltar ao Menu</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Vitória -->
+    <div class="victory-modal" id="victory-modal">
+        <div class="victory-content">
+            <h2 class="victory-title">🎉 Parabéns! 🎉</h2>
+            <p class="victory-message">
+                Você completou o jogo da memória! <br>
+                Assim como você nunca esquece dos nossos momentos especiais, 
+                você mostrou que tem uma memória incrível! ❤️
+            </p>
+            <button class="btn" onclick="closeVictoryModal()">Continuar</button>
+            <button class="btn" onclick="resetGame()">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <!-- Confetti -->
+    <div class="confetti" id="confetti"></div>
+
+    <script>
+        // Imagens do jogo (6 pares = 12 cartas)
+        const images = [
+            './img/juliaengracada.jpg',
+            '/img/jogomemoria1.jpg',
+            '/img/jogomemoria2.jpg',
+            '/img/jogomemoria3.jpg',
+            '/img/jogomemoria5.jpg',
+            '/img/lago.jpg'
+        ];
+
+        let gameBoard = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let moves = 0;
+        let gameStarted = false;
+        let startTime = null;
+        let timerInterval = null;
+
+        function initGame() {
+            // Criar array com pares de imagens
+            gameBoard = [...images, ...images];
+            
+            // Embaralhar
+            for (let i = gameBoard.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [gameBoard[i], gameBoard[j]] = [gameBoard[j], gameBoard[i]];
+            }
+            
+            // Criar HTML das cartas
+            const gameBoardElement = document.getElementById('game-board');
+            gameBoardElement.innerHTML = '';
+            
+            gameBoard.forEach((image, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.index = index;
+                card.dataset.image = image;
+                
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">❤️</div>
+                        <div class="card-back">
+                            <img src="${image}" alt="Foto do casal">
+                        </div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', flipCard);
+                gameBoardElement.appendChild(card);
+            });
+            
+            // Reset counters
+            flippedCards = [];
+            matchedPairs = 0;
+            moves = 0;
+            gameStarted = false;
+            startTime = null;
+            
+            updateDisplay();
+            
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function flipCard() {
+            if (!gameStarted) {
+                startGame();
+            }
+            
+            const card = this;
+            
+            // Não permitir flip se já estiver virada ou matched
+            if (card.classList.contains('flipped') || card.classList.contains('matched')) {
+                return;
+            }
+            
+            // Não permitir mais de 2 cartas viradas
+            if (flippedCards.length >= 2) {
+                return;
+            }
+            
+            // Virar carta
+            card.classList.add('flipped');
+            flippedCards.push(card);
+            
+            // Verificar match quando 2 cartas estão viradas
+            if (flippedCards.length === 2) {
+                moves++;
+                updateDisplay();
+                
+                setTimeout(checkMatch, 600);
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            
+            if (card1.dataset.image === card2.dataset.image) {
+                // Match!
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedPairs++;
+                
+                if (matchedPairs === 6) {
+                    // Jogo completo!
+                    setTimeout(showVictory, 500);
+                }
+            } else {
+                // Não match - virar de volta
+                setTimeout(() => {
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
+                }, 500);
+            }
+            
+            flippedCards = [];
+            updateDisplay();
+        }
+
+        function startGame() {
+            gameStarted = true;
+            startTime = Date.now();
+            
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            if (!startTime) return;
+            
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateDisplay() {
+            document.getElementById('moves').textContent = moves;
+            document.getElementById('pairs').textContent = matchedPairs;
+        }
+
+        function resetGame() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            document.getElementById('timer').textContent = '00:00';
+            closeVictoryModal();
+            initGame();
+        }
+
+        function showVictory() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            createConfetti();
+            document.getElementById('victory-modal').style.display = 'flex';
+        }
+
+        function closeVictoryModal() {
+            document.getElementById('victory-modal').style.display = 'none';
+            document.getElementById('confetti').innerHTML = '';
+        }
+
+        function createConfetti() {
+            const confettiContainer = document.getElementById('confetti');
+            const colors = ['#ff6b9d', '#c44569', '#f8b500', '#ff9ff3', '#f368e0'];
+            
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti-piece';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                    
+                    confettiContainer.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }, i * 50);
+            }
+        }
+
+        // Inicializar jogo
+        initGame();
+    </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+.love-letter {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.letter-decoration {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 3em;
+  color: rgba(255, 107, 157, 0.3);
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.letter-content {
+  position: relative;
+  z-index: 2;
+}
+
+.letter-greeting {
+  color: #c44569;
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.letter-text {
+  color: #444;
+  font-size: 1.2em;
+  line-height: 1.8;
+  margin-bottom: 30px;
+  text-align: justify;
+  text-indent: 30px;
+}
+
+.letter-text p {
+  margin-bottom: 20px;
+}
+
+.letter-signature {
+  text-align: right;
+  color: #c44569;
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-top: 30px;
+  font-style: italic;
+}
+
+.music-section {
+  background: linear-gradient(135deg, #ff6b9d, #c44569);
+  color: white;
+  padding: 30px;
+  border-radius: 20px;
+  margin-top: 30px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(255, 107, 157, 0.4);
+}
+
+.music-title {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.music-player {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  margin-bottom: 20px;
+}
+
+.play-btn {
+  background: rgba(255, 255, 255, 0.9);
+  color: #c44569;
+  border: none;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  font-size: 2em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  margin-bottom: 15px;
+}
+
+.play-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.play-btn.playing {
+  animation: musicPulse 1s ease-in-out infinite;
+}
+
+@keyframes musicPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.song-info {
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+.music-note {
+  font-size: 1.5em;
+  margin: 0 10px;
+  animation: musicFloat 2s ease-in-out infinite;
+}
+
+.music-note:nth-child(2) {
+  animation-delay: 0.5s;
+}
+.music-note:nth-child(3) {
+  animation-delay: 1s;
+}
+
+@keyframes musicFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@media (max-width: 768px) {
+  .love-letter {
+    padding: 25px;
+  }
+
+  .letter-greeting {
+    font-size: 1.5em;
+  }
+
+  .letter-text {
+    font-size: 1.1em;
+    text-indent: 20px;
+  }
+
+  .music-section {
+    padding: 25px 20px;
+  }
+
+  .play-btn {
+    width: 70px;
+    height: 70px;
+    font-size: 1.8em;
+  }
+}

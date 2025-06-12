@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nossas Memórias - Julia ❤️</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/memorias.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">📸 Nossas Memórias 📸</h1>
+            <p class="subtitle">Cada foto conta nossa história de amor</p>
+        </div>
+
+        <div class="gallery-container">
+            <div class="hearts-overlay" id="hearts-overlay"></div>
+
+            <div class="photo-display">
+                <img src="img/namorados2022.jpg" alt="Memória 1" class="photo active"
+                    data-info="Nosso primerio dia dos namorados em 2022 💕">
+                <img src="img/namorados2024.jpg" alt="Memória 2" class="photo"
+                    data-info="Nosso terceiro dia dos namorados em 2024 ❤️">
+                <img src="img/praiafirst.jpg" alt="Memória 3" class="photo" data-info="Nossa primeira viagem juntos 🌟">
+                <img src="img/interclasse.jpg" alt="Memória 4" class="photo" data-info="Minha fã número 1 😊">
+                <img src="img/escoladormiu.jpg" alt="Memória 5" class="photo" data-info="Nanando na escola 😴">
+                <img src="img/academia.jpg" alt="Memória 6" class="photo"
+                    data-info="Treino que rendeu uma unha quebrada 💔">
+                <img src="img/carrobotinho.jpg" alt="Memória 4" class="photo"
+                    data-info="As únicas fotos que eu gostei do meu sorriso foram com você!">
+                <img src=" img/durmi.jpg" alt="Memória 4" class="photo"
+                    data-info="Primeira vez que nanamos + skincare">
+                <img src="img/praiaa.jpg" alt="Memória 4" class="photo" data-info="Divando na praia">
+                <img src="img/julialinda.jpg" alt="Memória 4" class="photo"
+                    data-info="Eu amo essa foto, você saiu maravilhosa linda gostosa e fui eu que tirei 😍">
+                <img src="img/juliaengracada.jpg" alt="Memória 4" class="photo"
+                    data-info="AMO ESSA TAMBEM kkkkkkkkkkkkkk">
+
+                <div class="photo-counter">
+                    <span id="current-photo">1</span> / <span id="total-photos">6</span>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="nav-btn" id="prev-btn" onclick="previousPhoto()">‹</button>
+                <div class="photo-info" id="photo-info">Nossa primeira foto juntos - 05/03/2022 💕</div>
+                <button class="nav-btn" id="next-btn" onclick="nextPhoto()">›</button>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="menu.html" class="back-btn">← Voltar ao Menu</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPhotoIndex = 0;
+        const photos = document.querySelectorAll('.photo');
+        const totalPhotos = photos.length;
+
+        document.getElementById('total-photos').textContent = totalPhotos;
+
+        function showPhoto(index) {
+            photos.forEach(photo => photo.classList.remove('active'));
+            photos[index].classList.add('active');
+
+            document.getElementById('current-photo').textContent = index + 1;
+            document.getElementById('photo-info').textContent = photos[index].dataset.info;
+
+            // Atualizar botões
+            document.getElementById('prev-btn').disabled = index === 0;
+            document.getElementById('next-btn').disabled = index === totalPhotos - 1;
+
+            // Criar efeito de corações
+            createHeartEffect();
+        }
+
+        function nextPhoto() {
+            if (currentPhotoIndex < totalPhotos - 1) {
+                currentPhotoIndex++;
+                showPhoto(currentPhotoIndex);
+            }
+        }
+
+        function previousPhoto() {
+            if (currentPhotoIndex > 0) {
+                currentPhotoIndex--;
+                showPhoto(currentPhotoIndex);
+            }
+        }
+
+        function createHeartEffect() {
+            const overlay = document.getElementById('hearts-overlay');
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-particle';
+                    heart.innerHTML = '💕';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.top = Math.random() * 100 + '%';
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    overlay.appendChild(heart);
+
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 4000);
+                }, i * 200);
+            }
+        }
+
+        // Navegação por teclado
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowLeft') previousPhoto();
+            if (e.key === 'ArrowRight') nextPhoto();
+        });
+
+        // Navegação por swipe (mobile)
+        let startX = 0;
+        let endX = 0;
+
+        document.addEventListener('touchstart', function (e) {
+            startX = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', function (e) {
+            endX = e.changedTouches[0].clientX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const threshold = 50;
+            const diff = startX - endX;
+
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
+                    nextPhoto();
+                } else {
+                    previousPhoto();
+                }
+            }
+        }
+
+        // Inicializar
+        showPhoto(0);
+
+        // Criar efeito inicial
+        setTimeout(createHeartEffect, 1000);
+    </script>
+</body>
+
+</html>

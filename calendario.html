@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário do Amor - Julia ❤️</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/calendario.css">
+</head>
+<body>
+    <div class="floating-hearts" id="floating-hearts"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="title">💖 Calendário do Amor 💖</h1>
+            <p class="subtitle">Nosso tempo juntos é precioso</p>
+        </div>
+        
+        <div class="love-container">
+            <img src="img/casamentoane.jpg" alt="Nós dois juntos" class="couple-photo">
+            
+            <div class="romantic-message">
+                Eu não preciso de presente de dia dos namorados (mentira) porque cada segundo ao seu lado é um presente, cada minuto é uma bênção, cada hora é um sonho realizado. Obrigado por fazer cada dia valer a pena! 💕
+            </div>
+            
+            <div class="counter-container">
+                <h2 class="counter-title">💕 ESTAMOS JUNTOS HÁ 💕</h2>
+                
+                <div class="time-display">
+                    <div class="time-unit">
+                        <span class="time-number" id="days">0</span>
+                        <div class="time-label">Dias</div>
+                    </div>
+                    <div class="time-unit">
+                        <span class="time-number" id="hours">0</span>
+                        <div class="time-label">Horas</div>
+                    </div>
+                    <div class="time-unit">
+                        <span class="time-number" id="minutes">0</span>
+                        <div class="time-label">Minutos</div>
+                    </div>
+                    <div class="time-unit">
+                        <span class="time-number" id="seconds">0</span>
+                        <div class="time-label">Segundos</div>
+                    </div>
+                </div>
+                
+                <div class="anniversary-date">
+                    Desde 05 de Março de 2022 ❤️
+                </div>
+            </div>
+            
+            <a href="menu.html" class="back-btn">← Voltar ao Menu</a>
+        </div>
+    </div>
+
+    <script>
+        // Data de início do relacionamento
+        const startDate = new Date('2022-03-05T00:00:00');
+        
+        function updateCounter() {
+            const now = new Date();
+            const timeDiff = now - startDate;
+            
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+        }
+        
+        // Atualizar contador a cada segundo
+        updateCounter();
+        setInterval(updateCounter, 1000);
+        
+        // Criar corações flutuantes
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerHTML = ['💕', '❤️', '💖', '💗', '💝', '💘'][Math.floor(Math.random() * 6)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 6 + 's';
+            heart.style.animationDuration = (Math.random() * 2 + 6) + 's';
+            document.getElementById('floating-hearts').appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 8000);
+        }
+        
+        // Criar corações continuamente
+        setInterval(createFloatingHeart, 1200);
+        
+        // Criar alguns corações iniciais
+        for(let i = 0; i < 3; i++) {
+            setTimeout(createFloatingHeart, i * 400);
+        }
+    </script>
+</body>
+</html>
